@@ -1,0 +1,43 @@
+body {
+  font-family: "Lato", sans-serif;
+}
+
+search-bar {
+  margin-bottom: 1.563rem;
+}
+
+.header-logo-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+  margin-top: 2rem;
+}
+
+.filters-types {
+  margin: 1.563rem 0;
+  display: flex;
+  gap: 1.25rem;
+}
+
+.container {
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+#root {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 50px;
+}
+
+@media screen and (max-width: 1024px) {
+  #root {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+  }
+}
+@media screen and (max-width: 780px) {
+  #root {
+    grid-template-columns: 1fr;
+  }
+}
