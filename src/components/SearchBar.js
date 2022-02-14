@@ -1,3 +1,4 @@
+import {store} from '../index.js'
 class SearchBar extends HTMLElement {
   constructor() {
     super();
@@ -5,7 +6,7 @@ class SearchBar extends HTMLElement {
     this.render();
     this.container = this.shadowRoot.querySelector(".container");
     this.input = this.shadowRoot.querySelector("#searchbar-input");
-    this.search = "";
+    this.search = store.search;
   }
 
   onClickSearch() {
@@ -13,6 +14,7 @@ class SearchBar extends HTMLElement {
   }
 
   onInputChange(e) {
+    store.search = e.target.value;
     this.search = e.target.value;
   }
 
@@ -72,7 +74,7 @@ class SearchBar extends HTMLElement {
         <form>
             <input id="searchbar-input" type="text" placeholder="Rechercher une recette"/>
             <button>
-            <img src="static/icons/search.svg" alt="" />
+              <img src="static/icons/search.svg" alt="" />
             </button>
         </form>
         </div>

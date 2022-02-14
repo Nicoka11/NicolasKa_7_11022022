@@ -9,8 +9,6 @@ class FilterType extends HTMLElement {
 
   render() {
     this.shadowRoot.innerHTML = /*html*/ `
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-    rel="stylesheet">  
         <style>
             .Ingredients {
                background-color: #3282F7; 
