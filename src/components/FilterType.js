@@ -1,13 +1,16 @@
+import { store } from "../index.js";
 class FilterType extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
     this.type = this.getAttribute("type");
+    this.selectList = store.getStoreData(this.type.toLowerCase());
     this.isFocused = false;
     this.render();
   }
 
   render() {
+    console.log(this.type, this.selectList);
     this.shadowRoot.innerHTML = /*html*/ `
         <style>
             .Ingredients {
@@ -25,6 +28,9 @@ class FilterType extends HTMLElement {
                 display: flex;
                 align-items: center;
                 cursor: pointer;
+            }
+            .initial {
+                display: flex;
             }
             input {
                 background: transparent;
@@ -56,9 +62,11 @@ class FilterType extends HTMLElement {
             }
         </style>
         <div class="filter ${this.type}">
-            <input type="text" placeholder="${this.type}"/>
-            <div class="chevron">
+            <div class="initial">
+                <input type="text" placeholder="${this.type}"/>
+                <div class="chevron">
                     <svg xmlns="http://www.w3.org/2000/svg" height="32px" viewBox="0 0 24 24" width="32px" fill="#ffffff"><path d="M24 24H0V0h24v24z" fill="none" opacity=".87"/><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z"/></svg>
+                </div>
             </div>
         </div>
         `;
