@@ -27,13 +27,13 @@ class RecipeCard extends HTMLElement {
                 overflow: hidden;
             }
             .image-placeholder {
-                background-color: #ed6f80;
+                background-color: #C7BEBE;
             } 
             .title {
               font-size: 1.2rem;
             }
             .content {
-                background-color: #d43d51;
+                background-color: #E7E7E7;
                 padding: .2rem 1rem 2rem;
             }
 

@@ -4,13 +4,30 @@ class FilterType extends HTMLElement {
     super();
     this.attachShadow({ mode: "open" });
     this.type = this.getAttribute("type");
-    this.selectList = store.getStoreData(this.type.toLowerCase());
+    this.filters = store.getStoreData(this.type.toLowerCase());
     this.isFocused = false;
     this.render();
+    //Elements
+    this.filterEl = this.shadowRoot.querySelector(".filter");
+  }
+
+  onFocus() {
+    this.isFocused = !this.isFocused;
+    this.render();
+    this.filterEl.removeEventListener('click', this.onFocus);
+    this.filterEl = this.shadowRoot.querySelector(".filter");
+    this.filterEl.addEventListener("click", () => this.onFocus());
+  }
+
+  connectedCallback() {
+    this.filterEl.addEventListener("click", () => this.onFocus());
+  }
+
+  disconnectedCallback() {
+    this.filterEl.removeEventListener("click", this.onFocus);
   }
 
   render() {
-    console.log(this.type, this.selectList);
     this.shadowRoot.innerHTML = /*html*/ `
         <style>
             .Ingredients {
@@ -26,7 +43,8 @@ class FilterType extends HTMLElement {
                 padding: 1.2rem .5rem;
                 border-radius: 5px;
                 display: flex;
-                align-items: center;
+                flex-direction: column;
+                align-items: left;
                 cursor: pointer;
             }
             .initial {
@@ -60,14 +78,44 @@ class FilterType extends HTMLElement {
                 transform: rotate(180deg);
                 transition: transform .3s ease;
             }
+            button {
+                background: none;
+                outline: none;
+                border: none;
+                color: white;
+                font-size: .9rem;
+                cursor: pointer;
+                transition: color .3s ease;
+            }
+
+            button:hover, button:active {
+                color: black;
+            }
+
+            .filter-grid {
+                margin-top: 1.5rem;
+                display:grid;
+                grid-template-columns: repeat(3, 1fr);
+                place-items: start;
+                gap: .5rem;
+            }
         </style>
         <div class="filter ${this.type}">
             <div class="initial">
                 <input type="text" placeholder="${this.type}"/>
-                <div class="chevron">
+                <div class="chevron ${this.isFocused ? "chevron-active" : ""}">
                     <svg xmlns="http://www.w3.org/2000/svg" height="32px" viewBox="0 0 24 24" width="32px" fill="#ffffff"><path d="M24 24H0V0h24v24z" fill="none" opacity=".87"/><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z"/></svg>
                 </div>
             </div>
+            ${
+              this.isFocused
+                ? /*html*/ `<div class="filter-grid">
+                    ${this.filters
+                      .map((item) => /*html*/ `<button>${item}</button>`)
+                      .join("")}
+                </div>`
+                : ""
+            }
         </div>
         `;
   }
