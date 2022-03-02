@@ -1,10 +1,21 @@
+import { store, renderSelectedFilters } from "../index.js";
 class FilterOption extends HTMLElement {
   constructor() {
     super();
+  }
+
+  connectedCallback() {
     this.attachShadow({ mode: "open" });
     this.name = this.getAttribute("name");
     this.type = this.getAttribute("type");
     this.render();
+    this.deleteButton = this.shadowRoot.querySelector(".delete-button");
+    this.deleteButton.addEventListener("click", this.onDelete.bind(this));
+  }
+
+  onDelete() {
+    store.removeSelectedFilters(this.name);
+    renderSelectedFilters();
   }
 
   render() {
@@ -25,6 +36,8 @@ class FilterOption extends HTMLElement {
                     align-items: center;
                     gap: .4rem;
                     padding: .2rem 1rem;
+                    width: max-content;
+                    cursor: pointer;
                 }
                 p {
                     color: white;
@@ -32,13 +45,22 @@ class FilterOption extends HTMLElement {
                     font-family: inherit;
                     font-weight: 700;
                 }
+                .delete-button {
+                    background: transparent;
+                    border: none;
+                    outline: none;
+                    display: flex;
+                    cursor: pointer;
+                }
             </style>
             <div class="container ${this.type}">
                 <p>${this.name}</p>
+                <button class="delete-button">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#ffffff">
                         <path d="M0 0h24v24H0V0z" fill="none"/>
                         <path d="M14.59 8L12 10.59 9.41 8 8 9.41 10.59 12 8 14.59 9.41 16 12 13.41 14.59 16 16 14.59 13.41 12 16 9.41 14.59 8zM12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
                     </svg>
+                </button>
             </div>
         `;
   }

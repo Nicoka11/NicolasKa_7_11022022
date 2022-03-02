@@ -1,4 +1,4 @@
-import { store } from "../index.js";
+import { store, renderSelectedFilters } from "../index.js";
 class FilterType extends HTMLElement {
   constructor() {
     super();
@@ -14,13 +14,24 @@ class FilterType extends HTMLElement {
   onFocus() {
     this.isFocused = !this.isFocused;
     this.render();
-    this.filterEl.removeEventListener('click', this.onFocus);
+    this.filterEl.removeEventListener("click", this.onFocus.bind(this));
     this.filterEl = this.shadowRoot.querySelector(".filter");
-    this.filterEl.addEventListener("click", () => this.onFocus());
+    if (this.isFocused) {
+      this.shadowRoot.querySelector("input").focus();
+      this.shadowRoot
+        .querySelector(".filter-grid")
+        .addEventListener("click", (e) => this.addFilter(e));
+    }
+    this.filterEl.addEventListener("click", this.onFocus.bind(this));
+  }
+
+  addFilter(e) {
+    store.addSelectedFilters({ type: this.type, name: e.target.innerHTML });
+    renderSelectedFilters()
   }
 
   connectedCallback() {
-    this.filterEl.addEventListener("click", () => this.onFocus());
+    this.filterEl.addEventListener("click", this.onFocus.bind(this));
   }
 
   disconnectedCallback() {
@@ -46,6 +57,7 @@ class FilterType extends HTMLElement {
                 flex-direction: column;
                 align-items: left;
                 cursor: pointer;
+                transition: height .2s ease;
             }
             .initial {
                 display: flex;
@@ -78,7 +90,7 @@ class FilterType extends HTMLElement {
                 transform: rotate(180deg);
                 transition: transform .3s ease;
             }
-            button {
+            .filter-item {
                 background: none;
                 outline: none;
                 border: none;
@@ -88,7 +100,7 @@ class FilterType extends HTMLElement {
                 transition: color .3s ease;
             }
 
-            button:hover, button:active {
+            .filter-item:hover, .filter-item:active {
                 color: black;
             }
 
@@ -111,7 +123,10 @@ class FilterType extends HTMLElement {
               this.isFocused
                 ? /*html*/ `<div class="filter-grid">
                     ${this.filters
-                      .map((item) => /*html*/ `<button>${item}</button>`)
+                      .map(
+                        (item) =>
+                          /*html*/ `<button class="filter-item">${item}</button>`
+                      )
                       .join("")}
                 </div>`
                 : ""

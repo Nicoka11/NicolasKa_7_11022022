@@ -34,6 +34,7 @@ export default class Store {
           ),
         ].sort(),
       },
+      selectedFilters: [],
     };
   }
 
@@ -45,6 +46,15 @@ export default class Store {
   }
   getAppliance() {
     return this.state.appliance;
+  }
+
+  removeSelectedFilters(name) {
+    this.state.selectedFilters = this.state.selectedFilters.filter((filter) => {
+      return filter.name != name;
+    });
+  }
+  addSelectedFilters(newFilter) {
+    this.state.selectedFilters = [...this.state.selectedFilters, newFilter];
   }
 
   getStoreData(type) {

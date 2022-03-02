@@ -16,6 +16,7 @@ search-bar {
 .filters-selected {
   display: flex;
   gap: 1.25rem;
+  overflow-x: scroll;
 }
 
 .filters-types {
@@ -38,7 +39,7 @@ search-bar {
 @media screen and (max-width: 1024px) {
   #root {
     grid-template-columns: repeat(2, 1fr);
-    gap: 30px;
+    gap: 20px;
   }
 }
 @media screen and (max-width: 780px) {
