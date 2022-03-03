@@ -20,14 +20,19 @@ class FilterType extends HTMLElement {
       this.shadowRoot.querySelector("input").focus();
       this.shadowRoot
         .querySelector(".filter-grid")
-        .addEventListener("click", (e) => this.addFilter(e));
+        .addEventListener("click", (e) => {
+          if (e.target.classList.contains("filter-item")) {
+            console.log(e.target)
+            this.addFilter(e)
+          };
+        });
     }
     this.filterEl.addEventListener("click", this.onFocus.bind(this));
   }
 
   addFilter(e) {
     store.addSelectedFilters({ type: this.type, name: e.target.innerHTML });
-    renderSelectedFilters()
+    renderSelectedFilters();
   }
 
   connectedCallback() {

@@ -15,8 +15,9 @@ search-bar {
 
 .filters-selected {
   display: flex;
-  gap: 1.25rem;
-  overflow-x: scroll;
+  column-gap: 1.25rem;
+  row-gap: .75rem;
+  flex-wrap: wrap;
 }
 
 .filters-types {
