@@ -1,4 +1,5 @@
-import {store} from '../index.js'
+import {renderRecipes, store} from '../index.js'
+import { filterByInput } from '../search.js';
 class SearchBar extends HTMLElement {
   constructor() {
     super();
@@ -6,7 +7,6 @@ class SearchBar extends HTMLElement {
     this.render();
     this.container = this.shadowRoot.querySelector(".container");
     this.input = this.shadowRoot.querySelector("#searchbar-input");
-    this.search = store.search;
   }
 
   onClickSearch() {
@@ -15,7 +15,8 @@ class SearchBar extends HTMLElement {
 
   onInputChange(e) {
     store.search = e.target.value;
-    this.search = e.target.value;
+    filterByInput()
+    renderRecipes()
   }
 
   connectedCallback() {
@@ -24,8 +25,8 @@ class SearchBar extends HTMLElement {
   }
 
   disconnectedCallback() {
-    this.container.removeEventListener();
-    this.input.removeEventListener();
+    this.container.removeEventListener("click", this.onClickSearch);
+    this.input.removeEventListener("input", this.onInputChange);
   }
 
   render() {

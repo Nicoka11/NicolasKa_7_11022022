@@ -26,15 +26,21 @@ export function renderSelectedFilters() {
 }
 renderSelectedFilters();
 
-filterTypes.forEach((filterType) => {
-  const fragment = document.createElement("filter-type");
-  fragment.setAttribute("type", filterType);
-  rootFiltersTypes.appendChild(fragment);
-});
-
+export function renderFilterTypes() {
+  rootFiltersTypes.innerHTML = "";
+  filterTypes.forEach((filterType) => {
+    const fragment = document.createElement("filter-type");
+    fragment.setAttribute("type", filterType);
+    rootFiltersTypes.appendChild(fragment);
+  });
+}
+renderFilterTypes();
 
 export function renderRecipes() {
-  recipes.forEach((recipe) => {
+  root.innerHTML = "";
+  console.log("Coming from the renderRecipes function", store.state.recipes);
+  store.state.recipes.forEach((recipe) => {
+    console.log("Current Recipe : " + recipe);
     const fragment = document.createElement("recipe-card");
     fragment.setAttribute("id", recipe.id);
     fragment.recipe = recipe;

@@ -2,6 +2,10 @@ class RecipeCard extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
+    this.recipe;
+  }
+
+  connectedCallback() {
     this.render();
   }
 

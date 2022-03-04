@@ -1,4 +1,5 @@
-import { store, renderSelectedFilters } from "../index.js";
+import { store, renderSelectedFilters, renderFilterTypes } from "../index.js";
+import { logSearchParams } from "../search.js";
 class FilterType extends HTMLElement {
   constructor() {
     super();
@@ -12,6 +13,8 @@ class FilterType extends HTMLElement {
   }
 
   onFocus() {
+    document.querySelectorAll("filter-type").forEach(el => el.isFocused = false);
+    renderFilterTypes();
     this.isFocused = !this.isFocused;
     this.render();
     this.filterEl.removeEventListener("click", this.onFocus.bind(this));
@@ -22,7 +25,6 @@ class FilterType extends HTMLElement {
         .querySelector(".filter-grid")
         .addEventListener("click", (e) => {
           if (e.target.classList.contains("filter-item")) {
-            console.log(e.target)
             this.addFilter(e)
           };
         });
@@ -32,6 +34,7 @@ class FilterType extends HTMLElement {
 
   addFilter(e) {
     store.addSelectedFilters({ type: this.type, name: e.target.innerHTML });
+    logSearchParams()
     renderSelectedFilters();
   }
 
