@@ -2,18 +2,15 @@ import { store, renderSelectedFilters } from "../index.js";
 class FilterOption extends HTMLElement {
   constructor() {
     super();
+    this.attachShadow({ mode: "open" });
   }
 
   connectedCallback() {
-    this.attachShadow({ mode: "open" });
     this.name = this.getAttribute("name");
     this.type = this.getAttribute("type");
+    this.render();
     this.deleteButton = this.shadowRoot.querySelector(".delete-button");
     this.deleteButton.addEventListener("click", this.onDelete.bind(this));
-  }
-
-  connectedCallback() {
-    this.render();
   }
 
   onDelete() {

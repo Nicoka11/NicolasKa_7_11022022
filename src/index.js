@@ -26,15 +26,12 @@ export function renderSelectedFilters() {
 }
 renderSelectedFilters();
 
-export function renderFilterTypes() {
   rootFiltersTypes.innerHTML = "";
   filterTypes.forEach((filterType) => {
     const fragment = document.createElement("filter-type");
     fragment.setAttribute("type", filterType);
     rootFiltersTypes.appendChild(fragment);
   });
-}
-renderFilterTypes();
 
 export function renderRecipes() {
   root.innerHTML = "";

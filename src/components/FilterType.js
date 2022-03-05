@@ -1,4 +1,4 @@
-import { store, renderSelectedFilters, renderFilterTypes } from "../index.js";
+import { store, renderSelectedFilters } from "../index.js";
 import { logSearchParams } from "../search.js";
 class FilterType extends HTMLElement {
   constructor() {
@@ -13,28 +13,27 @@ class FilterType extends HTMLElement {
   }
 
   onFocus() {
-    document.querySelectorAll("filter-type").forEach(el => el.isFocused = false);
-    renderFilterTypes();
     this.isFocused = !this.isFocused;
+    document
+      .querySelectorAll("filter-type")
+      .forEach((el) =>
+        console.log(
+          el.shadowRoot.querySelector(".filter-grid").classList.remove("active")
+        )
+      );
+    this.removeEvents();
     this.render();
-    this.filterEl.removeEventListener("click", this.onFocus.bind(this));
+    this.attachEvents();
     this.filterEl = this.shadowRoot.querySelector(".filter");
     if (this.isFocused) {
       this.shadowRoot.querySelector("input").focus();
-      this.shadowRoot
-        .querySelector(".filter-grid")
-        .addEventListener("click", (e) => {
-          if (e.target.classList.contains("filter-item")) {
-            this.addFilter(e)
-          };
-        });
     }
     this.filterEl.addEventListener("click", this.onFocus.bind(this));
   }
 
   addFilter(e) {
     store.addSelectedFilters({ type: this.type, name: e.target.innerHTML });
-    logSearchParams()
+    logSearchParams();
     renderSelectedFilters();
   }
 
@@ -42,8 +41,27 @@ class FilterType extends HTMLElement {
     this.filterEl.addEventListener("click", this.onFocus.bind(this));
   }
 
-  disconnectedCallback() {
+  disconnectedCallback() {}
+
+  attachEvents() {
+    this.filterEl.addEventListener("click", this.onFocus);
+    this.shadowRoot
+      .querySelector(".filter-grid")
+      .addEventListener("click", (e) => {
+        if (e.target.classList.contains("filter-item")) {
+          this.addFilter(e);
+        }
+      });
+  }
+  removeEvents() {
     this.filterEl.removeEventListener("click", this.onFocus);
+    this.shadowRoot
+      .querySelector(".filter-grid")
+      .removeEventListener("click", (e) => {
+        if (e.target.classList.contains("filter-item")) {
+          this.addFilter(e);
+        }
+      });
   }
 
   render() {
@@ -114,10 +132,14 @@ class FilterType extends HTMLElement {
 
             .filter-grid {
                 margin-top: 1.5rem;
-                display:grid;
+                display:none;
                 grid-template-columns: repeat(3, 1fr);
                 place-items: start;
                 gap: .5rem;
+            }
+
+            .active {
+              display: grid
             }
         </style>
         <div class="filter ${this.type}">
@@ -127,19 +149,15 @@ class FilterType extends HTMLElement {
                     <svg xmlns="http://www.w3.org/2000/svg" height="32px" viewBox="0 0 24 24" width="32px" fill="#ffffff"><path d="M24 24H0V0h24v24z" fill="none" opacity=".87"/><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z"/></svg>
                 </div>
             </div>
-            ${
-              this.isFocused
-                ? /*html*/ `<div class="filter-grid">
+            <div class="filter-grid ${this.isFocused ? "active" : ""}">
                     ${this.filters
                       .map(
                         (item) =>
                           /*html*/ `<button class="filter-item">${item}</button>`
                       )
                       .join("")}
-                </div>`
-                : ""
-            }
-        </div>
+                </div>
+            </div>
         `;
   }
 }
