@@ -1,34 +1,40 @@
 import { store, renderSelectedFilters } from "../index.js";
-import { logSearchParams } from "../search.js";
+import { filterByInput, logSearchParams } from "../search.js";
 class FilterType extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
     this.type = this.getAttribute("type");
     this.filters = store.getStoreData(this.type.toLowerCase());
-    this.isFocused = false;
+    this.inputFilter = "";
     this.render();
     //Elements
     this.filterEl = this.shadowRoot.querySelector(".filter");
+    this.input = this.shadowRoot.querySelector("input");
   }
 
   onFocus() {
-    this.isFocused = !this.isFocused;
-    document
-      .querySelectorAll("filter-type")
-      .forEach((el) =>
-        console.log(
-          el.shadowRoot.querySelector(".filter-grid").classList.remove("active")
-        )
-      );
-    this.removeEvents();
-    this.render();
-    this.attachEvents();
-    this.filterEl = this.shadowRoot.querySelector(".filter");
-    if (this.isFocused) {
-      this.shadowRoot.querySelector("input").focus();
-    }
-    this.filterEl.addEventListener("click", this.onFocus.bind(this));
+    const wasElementinFocus = this.shadowRoot.querySelector(".filter-grid").classList.contains("active");
+    document.querySelectorAll("filter-type").forEach((el) => {
+      el.shadowRoot.querySelector(".filter-grid").classList.remove("active");
+      el.shadowRoot
+        .querySelector(".chevron")
+        .classList.remove("chevron-active");
+      el.shadowRoot.querySelector("input").blur();
+      el.input.value = "";
+      el.inputFilter = "";
+    });
+    if (wasElementinFocus) return;
+
+    this.shadowRoot.querySelector(".filter-grid").classList.add("active");
+    this.shadowRoot.querySelector(".chevron").classList.add("chevron-active");
+    this.input.focus();
+  }
+
+  onInputChange(e) {
+    this.inputFilter = e.target.value;
+    this.filters = filterByInput(this.inputFilter, store.getStoreData(this.type.toLowerCase()));
+    this.shadowRoot.querySelector(".filter-grid").innerHTML = this.renderFilters();
   }
 
   addFilter(e) {
@@ -38,13 +44,11 @@ class FilterType extends HTMLElement {
   }
 
   connectedCallback() {
-    this.filterEl.addEventListener("click", this.onFocus.bind(this));
+    this.attachEvents();
   }
 
-  disconnectedCallback() {}
-
   attachEvents() {
-    this.filterEl.addEventListener("click", this.onFocus);
+    this.filterEl.addEventListener("click", this.onFocus.bind(this));
     this.shadowRoot
       .querySelector(".filter-grid")
       .addEventListener("click", (e) => {
@@ -52,6 +56,7 @@ class FilterType extends HTMLElement {
           this.addFilter(e);
         }
       });
+    this.input.addEventListener("input", (e) => this.onInputChange(e));
   }
   removeEvents() {
     this.filterEl.removeEventListener("click", this.onFocus);
@@ -62,6 +67,15 @@ class FilterType extends HTMLElement {
           this.addFilter(e);
         }
       });
+  }
+
+  renderFilters() {
+    return this.filters
+    .map(
+      (item) =>
+        /*html*/ `<button class="filter-item">${item}</button>`
+    )
+    .join("")
   }
 
   render() {
@@ -87,6 +101,7 @@ class FilterType extends HTMLElement {
             }
             .initial {
                 display: flex;
+                justify-content: space-between;
             }
             input {
                 background: transparent;
@@ -102,12 +117,17 @@ class FilterType extends HTMLElement {
                 opacity: 1;
                 font-weight: 700;
             }
+            input:focus::placeholder {
+                color: white;
+                opacity: .5;
+                font-weight: 700;
+            }
 
             .chevron {
                 display: flex;
             } 
             
-            .chevron-active svg {
+            .chevron svg {
                 transform: rotate(0);
                 transition: transform .3s ease;
             }
@@ -123,6 +143,7 @@ class FilterType extends HTMLElement {
                 color: white;
                 font-size: .9rem;
                 cursor: pointer;
+                text-align: left;
                 transition: color .3s ease;
             }
 
@@ -145,17 +166,12 @@ class FilterType extends HTMLElement {
         <div class="filter ${this.type}">
             <div class="initial">
                 <input type="text" placeholder="${this.type}"/>
-                <div class="chevron ${this.isFocused ? "chevron-active" : ""}">
+                <div class="chevron">
                     <svg xmlns="http://www.w3.org/2000/svg" height="32px" viewBox="0 0 24 24" width="32px" fill="#ffffff"><path d="M24 24H0V0h24v24z" fill="none" opacity=".87"/><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z"/></svg>
                 </div>
             </div>
-            <div class="filter-grid ${this.isFocused ? "active" : ""}">
-                    ${this.filters
-                      .map(
-                        (item) =>
-                          /*html*/ `<button class="filter-item">${item}</button>`
-                      )
-                      .join("")}
+            <div class="filter-grid">
+                    ${this.renderFilters()}
                 </div>
             </div>
         `;

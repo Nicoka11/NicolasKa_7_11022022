@@ -35,7 +35,7 @@ class FilterOption extends HTMLElement {
                     display: flex;
                     align-items: center;
                     gap: .4rem;
-                    padding: .2rem 1rem;
+                    padding: .5rem 1rem;
                     width: max-content;
                     cursor: pointer;
                 }
@@ -44,6 +44,7 @@ class FilterOption extends HTMLElement {
                     font-size: .9rem;
                     font-family: inherit;
                     font-weight: 700;
+                    margin: 0;
                 }
                 .delete-button {
                     background: transparent;

@@ -1,5 +1,5 @@
-import {renderRecipes, store} from '../index.js'
-import { filterByInput } from '../search.js';
+import { renderRecipes, store } from "../index.js";
+import { filterRecipesByInput } from "../search.js";
 class SearchBar extends HTMLElement {
   constructor() {
     super();
@@ -15,8 +15,8 @@ class SearchBar extends HTMLElement {
 
   onInputChange(e) {
     store.search = e.target.value;
-    filterByInput()
-    renderRecipes()
+    filterRecipesByInput();
+    renderRecipes();
   }
 
   connectedCallback() {

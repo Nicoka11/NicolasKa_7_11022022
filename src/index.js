@@ -35,9 +35,23 @@ renderSelectedFilters();
 
 export function renderRecipes() {
   root.innerHTML = "";
-  console.log("Coming from the renderRecipes function", store.state.recipes);
+  if (!store.state.recipes.length) {
+    root.innerHTML = /*html*/`
+      <style>
+        p {
+          color: #C7BEBE;
+          font-size: 1.5rem;
+          font-weight: 700;
+          margin: 1rem auto;
+        }
+      </style>
+      <div>
+        <p>Aucune recette à afficher</p>
+      </div>
+    `;
+    return;
+  }
   store.state.recipes.forEach((recipe) => {
-    console.log("Current Recipe : " + recipe);
     const fragment = document.createElement("recipe-card");
     fragment.setAttribute("id", recipe.id);
     fragment.recipe = recipe;

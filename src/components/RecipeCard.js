@@ -52,6 +52,9 @@ class RecipeCard extends HTMLElement {
                 font-size: 1.25rem;
                 font-weight: 700;
               }
+              .time p {
+                white-space: nowrap;
+              }
               .time-icon {
                 margin-right: .4rem;
                 display: flex;
