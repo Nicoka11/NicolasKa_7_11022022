@@ -7,6 +7,8 @@ import FilterOption from "./components/FilterOption.js";
 
 import Store from "./store.js";
 
+import { filterByIngredient } from "./search.js";
+
 export const store = new Store(recipes);
 
 const root = document.getElementById("root");
@@ -59,6 +61,8 @@ export function renderRecipes() {
   });
 }
 renderRecipes();
+
+filterByIngredient("chocolat");
 
 window.customElements.define("recipe-card", RecipeCard);
 window.customElements.define("search-bar", SearchBar);

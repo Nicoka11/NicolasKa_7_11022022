@@ -3,6 +3,7 @@ export default class Store {
     this.state = {
       search: "",
       recipes: recipes,
+      filteredByTagRecipes: [],
       // Datasets
       datasets: {
         ingredients: [
@@ -30,7 +31,6 @@ export default class Store {
               .map((recipe) => {
                 return recipe.appliance;
               })
-              .flat()
           ),
         ].sort(),
       },

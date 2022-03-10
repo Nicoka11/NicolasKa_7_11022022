@@ -16,12 +16,18 @@ search-bar {
 .filters-selected {
   display: flex;
   column-gap: 1.25rem;
-  row-gap: .75rem;
+  row-gap: 0.75rem;
   flex-wrap: wrap;
 }
 
-.filters-types {
+.filters-types-wrapper {
+  position: relative;
+  height: 4.4rem;
   margin: 1rem 0 1.563rem 0rem;
+}
+
+.filters-types {
+  position: absolute;
   display: flex;
   gap: 1.25rem;
 }
