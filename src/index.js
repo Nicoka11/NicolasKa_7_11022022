@@ -7,8 +7,6 @@ import FilterOption from "./components/FilterOption.js";
 
 import Store from "./store.js";
 
-import { filterByIngredient } from "./search.js";
-
 export const store = new Store(recipes);
 
 const root = document.getElementById("root");
@@ -26,43 +24,47 @@ export function renderSelectedFilters() {
     rootFiltersSelected.appendChild(fragment);
   });
 }
-renderSelectedFilters();
 
+function renderFilterTypes() {
   rootFiltersTypes.innerHTML = "";
   filterTypes.forEach((filterType) => {
     const fragment = document.createElement("filter-type");
     fragment.setAttribute("type", filterType);
     rootFiltersTypes.appendChild(fragment);
-  });
+  })
+};
 
 export function renderRecipes() {
   root.innerHTML = "";
   if (!store.state.recipes.length) {
-    root.innerHTML = /*html*/`
-      <style>
-        p {
-          color: #C7BEBE;
-          font-size: 1.5rem;
-          font-weight: 700;
-          margin: 1rem auto;
-        }
+    root.innerHTML = /*html*/ `
+    <style>
+      p {
+        color: #C7BEBE;
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin: 1rem auto;
+      }
       </style>
       <div>
-        <p>Aucune recette à afficher</p>
+      <p>Aucune recette à afficher</p>
       </div>
-    `;
+      `;
     return;
   }
-  store.state.recipes.forEach((recipe) => {
+  store.state.filteredRecipes.forEach((recipe) => {
     const fragment = document.createElement("recipe-card");
     fragment.setAttribute("id", recipe.id);
     fragment.recipe = recipe;
     root.appendChild(fragment);
   });
 }
-renderRecipes();
 
-filterByIngredient("chocolat");
+function init() {
+  renderFilterTypes();
+  renderRecipes();
+}
+init();
 
 window.customElements.define("recipe-card", RecipeCard);
 window.customElements.define("search-bar", SearchBar);

@@ -1,5 +1,5 @@
-import { store, renderSelectedFilters } from "../index.js";
-import { filterByInput, logSearchParams } from "../search.js";
+import { store, renderSelectedFilters, renderRecipes } from "../index.js";
+import filter, { filterByInput, logSearchParams } from "../search.js";
 class FilterType extends HTMLElement {
   constructor() {
     super();
@@ -41,6 +41,8 @@ class FilterType extends HTMLElement {
     store.addSelectedFilters({ type: this.type, name: e.target.innerHTML });
     logSearchParams();
     renderSelectedFilters();
+    filter();
+    renderRecipes();
   }
 
   connectedCallback() {

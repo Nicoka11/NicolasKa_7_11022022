@@ -7,14 +7,18 @@ Searchbar : ${store.search},
 Active filters : ${store.state.selectedFilters
     .map((filter) => filter.name)
     .join(", ")}`);
-  console.log(store.state.selectedFilters);
 }
 
-export function filterRecipesByInput() {
+export default function filter() {
+  store.state.selectedFilters.length
+    ? filterByTags()
+    : (store.state.filteredRecipes = recipes);
   const regEx = store.search.length
     ? new RegExp(`${store.search}`, "gim")
     : /./g;
-  store.state.recipes = recipes.filter((recipe) => recipe.name.match(regEx));
+  store.state.filteredRecipes = store.state.filteredRecipes.filter((recipe) =>
+    regEx.test(recipe.name)
+  );
 }
 
 export function filterByInput(filterSource, dataArray) {
@@ -24,14 +28,15 @@ export function filterByInput(filterSource, dataArray) {
   return dataArray.filter((data) => data.match(regEx));
 }
 
-export function filterByTags(array) {
-  let filtering = store.state.recipes;
-  array.forEach(({ type, name }) => {
+export function filterByTags() {
+  let filtering = recipes;
+  store.state.selectedFilters.forEach(({ type, name }) => {
     factory(type, name);
   });
+  store.state.filteredRecipes = filtering;
 
   function factory(type, name) {
-    switch (type) {
+    switch (true) {
       case type === "Ingredients":
         filterByIngredient(name);
         break;
@@ -45,25 +50,28 @@ export function filterByTags(array) {
   }
 
   function filterByIngredient(name) {
+    const regExp = new RegExp(`\\[${name}\\]`, "gim");
     filtering = filtering.filter((rec) => {
-      recipes.ingredients.map((ingObj) => ingObj.ingredient).includes(name);
+      const ingredients = rec.ingredients
+        .map((ingObj) => `[${ingObj.ingredient}]`)
+        .join(",");
+      return regExp.test(ingredients);
     });
   }
+
   function filterByAppliance(name) {
-    return 1;
+    const regExp = new RegExp(`${name}`, "gim");
+    filtering = filtering.filter((rec) => {
+      return regExp.test(rec.appliance);
+    });
   }
   function filterByUstensils(name) {
-    return 1;
+    const regExp = new RegExp(`\\[${name}\\]`, "gim");
+    filtering = filtering.filter((rec) => {
+      const ustensils = rec.ustensils
+        .map((ustensil) => `[${ustensil}]`)
+        .join(",");
+      return regExp.test(ustensils);
+    });
   }
-}
-
-export function filterByIngredient(name) {
-  const regExp = new RegExp(`\\[${name}\\]`, "gim");
-  console.log(regExp);
-  store.state.filteredByTagRecipes = store.state.recipes.filter((rec) => {
-    const ingredients = rec.ingredients
-      .map((ingObj) => `[${ingObj.ingredient}]`)
-      .join(",");
-    return regExp.test(ingredients);
-  });
 }

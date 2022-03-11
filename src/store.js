@@ -3,7 +3,7 @@ export default class Store {
     this.state = {
       search: "",
       recipes: recipes,
-      filteredByTagRecipes: [],
+      filteredRecipes: recipes,
       // Datasets
       datasets: {
         ingredients: [

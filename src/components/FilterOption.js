@@ -1,4 +1,5 @@
-import { store, renderSelectedFilters } from "../index.js";
+import { store, renderSelectedFilters, renderRecipes } from "../index.js";
+import filter from "../search.js";
 class FilterOption extends HTMLElement {
   constructor() {
     super();
@@ -15,7 +16,9 @@ class FilterOption extends HTMLElement {
 
   onDelete() {
     store.removeSelectedFilters(this.name);
-    renderSelectedFilters();
+      renderSelectedFilters();
+      filter();
+      renderRecipes();
   }
 
   render() {

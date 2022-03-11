@@ -1,5 +1,5 @@
 import { renderRecipes, store } from "../index.js";
-import { filterRecipesByInput } from "../search.js";
+import filter from "../search.js";
 class SearchBar extends HTMLElement {
   constructor() {
     super();
@@ -15,7 +15,7 @@ class SearchBar extends HTMLElement {
 
   onInputChange(e) {
     store.search = e.target.value;
-    filterRecipesByInput();
+    filter();
     renderRecipes();
   }
 
@@ -65,7 +65,7 @@ class SearchBar extends HTMLElement {
             }
             
             button {
-              background: transparent;
+                background: transparent;
                 outline: none;
                 border: none;
                 cursor: pointer;
