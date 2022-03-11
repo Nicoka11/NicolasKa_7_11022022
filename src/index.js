@@ -36,7 +36,7 @@ function renderFilterTypes() {
 
 export function renderRecipes() {
   root.innerHTML = "";
-  if (!store.state.recipes.length) {
+  if (!store.state.filteredRecipes.length) {
     root.innerHTML = /*html*/ `
     <style>
       p {
