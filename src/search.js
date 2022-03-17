@@ -15,10 +15,13 @@ export default function filter() {
     : (store.state.recipesFiltered = recipes);
   const regEx =
     store.search.length > 2 ? new RegExp(`${store.search}`, "gim") : /./g;
-  store.state.recipesFiltered = store.state.recipesFiltered.filter((recipe) =>
-    regEx.test(recipe.name)
-  );
-  store.setFilteredTags()
+
+  let filteredArray = [];
+  for (const recipe of store.state.recipesFiltered) {
+    if (regEx.test(recipe.name)) filteredArray.push(recipe);
+  }
+  store.state.recipesFiltered = filteredArray;
+  store.setFilteredTags();
 }
 
 export function filterByInput(filterSource, dataArray) {
