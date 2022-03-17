@@ -5,7 +5,7 @@ class FilterType extends HTMLElement {
     super();
     this.attachShadow({ mode: "open" });
     this.type = this.getAttribute("type");
-    this.filters = store.getStoreData(this.type.toLowerCase());
+    this.filters = store.getStoreData(`${this.type.toLowerCase()}Filtered`);
     this.inputFilter = "";
     this.render();
     //Elements
@@ -14,7 +14,10 @@ class FilterType extends HTMLElement {
   }
 
   onFocus() {
-    const wasElementinFocus = this.shadowRoot.querySelector(".filter-grid").classList.contains("active");
+    this.renderFilters();
+    const wasElementinFocus = this.shadowRoot
+      .querySelector(".filter-grid")
+      .classList.contains("active");
     document.querySelectorAll("filter-type").forEach((el) => {
       el.shadowRoot.querySelector(".filter-grid").classList.remove("active");
       el.shadowRoot
@@ -33,8 +36,11 @@ class FilterType extends HTMLElement {
 
   onInputChange(e) {
     this.inputFilter = e.target.value;
-    this.filters = filterByInput(this.inputFilter, store.getStoreData(this.type.toLowerCase()));
-    this.shadowRoot.querySelector(".filter-grid").innerHTML = this.renderFilters();
+    this.filters = filterByInput(
+      this.inputFilter,
+      store.getStoreData(`${this.type.toLowerCase()}Filtered`)
+    );
+    this.renderFilters();
   }
 
   addFilter(e) {
@@ -72,12 +78,14 @@ class FilterType extends HTMLElement {
   }
 
   renderFilters() {
-    return this.filters
-    .map(
-      (item) =>
-        /*html*/ `<button class="filter-item">${item}</button>`
-    )
-    .join("")
+    this.filters = filterByInput(
+      this.inputFilter,
+      store.getStoreData(`${this.type.toLowerCase()}Filtered`)
+    );
+    const filterGrid = this.shadowRoot.querySelector(".filter-grid");
+    filterGrid.innerHTML = this.filters
+      .map((item) => /*html*/ `<button class="filter-item">${item}</button>`)
+      .join("");
   }
 
   render() {
@@ -173,10 +181,10 @@ class FilterType extends HTMLElement {
                 </div>
             </div>
             <div class="filter-grid">
-                    ${this.renderFilters()}
                 </div>
             </div>
         `;
+    this.renderFilters();
   }
 }
 

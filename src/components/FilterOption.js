@@ -18,6 +18,9 @@ class FilterOption extends HTMLElement {
     store.removeSelectedFilters(this.name);
       renderSelectedFilters();
       filter();
+      document.querySelectorAll("filter-type").forEach((filterType) => {
+        filterType.renderFilters();
+      });
       renderRecipes();
   }
 

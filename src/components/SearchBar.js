@@ -17,6 +17,9 @@ class SearchBar extends HTMLElement {
     store.search = e.target.value;
     filter();
     renderRecipes();
+    document.querySelectorAll("filter-type").forEach((filterType) => {
+      filterType.renderFilters();
+    });
   }
 
   connectedCallback() {

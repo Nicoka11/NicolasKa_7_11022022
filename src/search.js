@@ -12,13 +12,13 @@ Active filters : ${store.state.selectedFilters
 export default function filter() {
   store.state.selectedFilters.length
     ? filterByTags()
-    : (store.state.filteredRecipes = recipes);
-  const regEx = store.search.length
-    ? new RegExp(`${store.search}`, "gim")
-    : /./g;
-  store.state.filteredRecipes = store.state.filteredRecipes.filter((recipe) =>
+    : (store.state.recipesFiltered = recipes);
+  const regEx =
+    store.search.length > 2 ? new RegExp(`${store.search}`, "gim") : /./g;
+  store.state.recipesFiltered = store.state.recipesFiltered.filter((recipe) =>
     regEx.test(recipe.name)
   );
+  store.setFilteredTags()
 }
 
 export function filterByInput(filterSource, dataArray) {
@@ -33,7 +33,8 @@ export function filterByTags() {
   store.state.selectedFilters.forEach(({ type, name }) => {
     factory(type, name);
   });
-  store.state.filteredRecipes = filtering;
+  store.state.recipesFiltered = filtering;
+  store.setFilteredTags();
 
   function factory(type, name) {
     switch (true) {

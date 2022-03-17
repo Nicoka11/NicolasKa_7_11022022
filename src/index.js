@@ -31,12 +31,12 @@ function renderFilterTypes() {
     const fragment = document.createElement("filter-type");
     fragment.setAttribute("type", filterType);
     rootFiltersTypes.appendChild(fragment);
-  })
-};
+  });
+}
 
 export function renderRecipes() {
   root.innerHTML = "";
-  if (!store.state.filteredRecipes.length) {
+  if (!store.state.recipesFiltered.length) {
     root.innerHTML = /*html*/ `
     <style>
       p {
@@ -52,7 +52,7 @@ export function renderRecipes() {
       `;
     return;
   }
-  store.state.filteredRecipes.forEach((recipe) => {
+  store.state.recipesFiltered.forEach((recipe) => {
     const fragment = document.createElement("recipe-card");
     fragment.setAttribute("id", recipe.id);
     fragment.recipe = recipe;
