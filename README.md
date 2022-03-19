@@ -1,3 +1,3 @@
 # NicolasKa_7_11022022
 
-Lien vers le test de performance JSbench.ch : https://jsben.ch/BIu2
+Projet 7 pour Open Classrooms : Les petits plats
