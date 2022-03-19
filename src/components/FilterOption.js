@@ -1,5 +1,5 @@
 import { store, renderSelectedFilters, renderRecipes } from "../index.js";
-import filter from "../search.js";
+import filter, { logSearchParams } from "../search.js";
 class FilterOption extends HTMLElement {
   constructor() {
     super();
@@ -16,12 +16,13 @@ class FilterOption extends HTMLElement {
 
   onDelete() {
     store.removeSelectedFilters(this.name);
-      renderSelectedFilters();
-      filter();
-      document.querySelectorAll("filter-type").forEach((filterType) => {
-        filterType.renderFilters();
-      });
-      renderRecipes();
+    renderSelectedFilters();
+    filter();
+    document.querySelectorAll("filter-type").forEach((filterType) => {
+      filterType.renderFilters();
+    });
+    logSearchParams();
+    renderRecipes();
   }
 
   render() {

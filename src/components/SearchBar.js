@@ -1,5 +1,5 @@
 import { renderRecipes, store } from "../index.js";
-import filter from "../search.js";
+import filter, { logSearchParams } from "../search.js";
 class SearchBar extends HTMLElement {
   constructor() {
     super();
@@ -17,6 +17,7 @@ class SearchBar extends HTMLElement {
     store.search = e.target.value;
     filter();
     renderRecipes();
+    logSearchParams();
     document.querySelectorAll("filter-type").forEach((filterType) => {
       filterType.renderFilters();
     });
