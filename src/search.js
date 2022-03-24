@@ -16,7 +16,7 @@ export default function filter() {
   const regEx =
     store.search.length > 2 ? new RegExp(`${store.search}`, "gim") : /./g;
   store.state.recipesFiltered = store.state.recipesFiltered.filter((recipe) =>
-    regEx.test(recipe.name)
+    regEx.test(`${recipe.name}${recipe.description}`)
   );
   store.setFilteredTags()
 }
